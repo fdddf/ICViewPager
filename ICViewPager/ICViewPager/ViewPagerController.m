@@ -204,9 +204,11 @@
     
     CGFloat topLayoutGuide = 0.0;
     if (IOS_VERSION_7) {
-        topLayoutGuide = 20.0;
-        if (self.navigationController && !self.navigationController.navigationBarHidden) {
-            topLayoutGuide += self.navigationController.navigationBar.frame.size.height;
+        if(self.navigationController && self.navigationController.navigationBar.translucent){
+            topLayoutGuide = 20.0;
+            if (!self.navigationController.navigationBarHidden) {
+                topLayoutGuide += self.navigationController.navigationBar.frame.size.height;
+            }
         }
     }
     
@@ -221,7 +223,12 @@
     frame.origin.x = 0.0;
     frame.origin.y = [self.tabLocation boolValue] ? topLayoutGuide + CGRectGetHeight(self.tabsView.frame) : topLayoutGuide;
     frame.size.width = CGRectGetWidth(self.view.frame);
-    frame.size.height = CGRectGetHeight(self.view.frame) - (topLayoutGuide + CGRectGetHeight(self.tabsView.frame)) - (self.tabBarController.tabBar.hidden ? 0 : CGRectGetHeight(self.tabBarController.tabBar.frame));
+    if(self.tabBarController.tabBar.translucent){
+        frame.size.height = CGRectGetHeight(self.view.frame) - (topLayoutGuide + CGRectGetHeight(self.tabsView.frame)) - (self.tabBarController.tabBar.hidden ? 0 : CGRectGetHeight(self.tabBarController.tabBar.frame));
+    }else{
+        frame.size.height = CGRectGetHeight(self.view.frame) - (topLayoutGuide + CGRectGetHeight(self.tabsView.frame));
+    }
+    
     self.contentView.frame = frame;
 }
 
